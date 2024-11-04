@@ -10,7 +10,7 @@ void main() async {
 
   runApp(
     MaterialApp(
-      title: 'Flutter Cubit Create Page',
+      title: 'Flutter Bloc Create Page',
       darkTheme: const MaterialTheme(TextTheme()).dark(),
       themeMode: ThemeMode.dark,
       home: HomePage(

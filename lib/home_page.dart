@@ -218,6 +218,10 @@ class ${namePascalCase}View extends StatefulWidget {
 }
 
 class _${namePascalCase}ViewState extends State<${namePascalCase}View> {
+  ${namePascalCase}PageCubit get _cubit {
+    return context.read<${namePascalCase}PageCubit>();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<${namePascalCase}PageCubit, ${namePascalCase}PageState>(
