@@ -183,7 +183,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '${nameSnakeCase}_page_state.dart';
 
 class ${namePascalCase}PageCubit extends Cubit<${namePascalCase}PageState> {
+  bool _mounted = true;
+
   ${namePascalCase}PageCubit() : super(const ${namePascalCase}PageState());
+
+  @override
+  Future<void> close() {
+    _mounted = false;
+    return super.close();
+  }
+
+  void _emit(${namePascalCase}PageState newState) {
+    if (_mounted) emit(newState);
+  }
 }
 ''',
         ),
