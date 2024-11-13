@@ -1,6 +1,6 @@
 {
-    "name": "flutter_cubit_create_page",
-    "short_name": "flutter_cubit_create_page",
+    "name": "flutter_bloc_create_page",
+    "short_name": "flutter_bloc_create_page",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

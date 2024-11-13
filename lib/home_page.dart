@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cubit_create_page/cubit/home_page_cubit.dart';
-import 'package:flutter_cubit_create_page/cubit/home_page_state.dart';
-import 'package:flutter_cubit_create_page/raw_code.dart';
+import 'package:flutter_bloc_create_page/cubit/home_page_cubit.dart';
+import 'package:flutter_bloc_create_page/cubit/home_page_state.dart';
+import 'package:flutter_bloc_create_page/raw_code.dart';
 import 'package:recase/recase.dart';
 import 'package:syntax_highlight/syntax_highlight.dart';
 
