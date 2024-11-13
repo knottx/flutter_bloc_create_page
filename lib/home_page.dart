@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cubit_create_page/cubit/home_page_cubit.dart';
 import 'package:flutter_cubit_create_page/cubit/home_page_state.dart';
+import 'package:flutter_cubit_create_page/raw_code.dart';
 import 'package:recase/recase.dart';
 import 'package:syntax_highlight/syntax_highlight.dart';
 
@@ -38,23 +39,14 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  HomePageCubit get _cubit {
+    return context.read<HomePageCubit>();
+  }
+
   final ScrollController _scrollController = ScrollController();
   final ScrollController _stateScrollController = ScrollController();
   final ScrollController _cubitScrollController = ScrollController();
   final ScrollController _pageScrollController = ScrollController();
-
-  final TextEditingController _nameTextEditingController =
-      TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _nameTextEditingController.addListener(() {
-      final name = _nameTextEditingController.text;
-      context.read<HomePageCubit>().setName(name);
-    });
-    _nameTextEditingController.text = 'Home';
-  }
 
   @override
   void dispose() {
@@ -62,7 +54,6 @@ class _HomeViewState extends State<HomeView> {
     _stateScrollController.dispose();
     _cubitScrollController.dispose();
     _pageScrollController.dispose();
-    _nameTextEditingController.dispose();
     super.dispose();
   }
 
@@ -112,159 +103,29 @@ class _HomeViewState extends State<HomeView> {
         _code(
           controller: _stateScrollController,
           fileName: '${nameSnakeCase}_page_state.dart',
-          code: '''
-import 'package:equatable/equatable.dart';
-
-enum ${namePascalCase}PageStatus {
-  initial,
-  loading,
-  ready,
-  failure,
-  ;
-
-  bool get isLoading => this == ${namePascalCase}PageStatus.loading;
-}
-
-class ${namePascalCase}PageState extends Equatable {
-  final ${namePascalCase}PageStatus status;
-  final Object? error;
-
-  const ${namePascalCase}PageState({
-    this.status = ${namePascalCase}PageStatus.initial,
-    this.error,
-  });
-
-  @override
-  List<Object?> get props => [
-        status,
-        error,
-      ];
-
-  ${namePascalCase}PageState copyWith({
-    ${namePascalCase}PageStatus? status,
-    Object? error,
-  }) {
-    return ${namePascalCase}PageState(
-      status: status ?? this.status,
-      error: error ?? this.error,
-    );
-  }
-
-  ${namePascalCase}PageState loading() {
-    return copyWith(
-      status: ${namePascalCase}PageStatus.loading,
-    );
-  }
-
-  ${namePascalCase}PageState ready() {
-    return copyWith(
-      status: ${namePascalCase}PageStatus.ready,
-    );
-  }
-
-  ${namePascalCase}PageState failure(
-    Object error,
-  ) {
-    return copyWith(
-      status: ${namePascalCase}PageStatus.failure,
-      error: error,
-    );
-  }
-}
-''',
+          code: RawCode.pageState(
+            nameSnakeCase: nameSnakeCase,
+            namePascalCase: namePascalCase,
+          ),
         ),
         const SizedBox(height: 16),
         _code(
           controller: _cubitScrollController,
           fileName: '${nameSnakeCase}_page_cubit.dart',
-          code: '''
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '${nameSnakeCase}_page_state.dart';
-
-class ${namePascalCase}PageCubit extends Cubit<${namePascalCase}PageState> {
-  bool _mounted = true;
-
-  ${namePascalCase}PageCubit() : super(const ${namePascalCase}PageState());
-
-  @override
-  Future<void> close() {
-    _mounted = false;
-    return super.close();
-  }
-
-  void _emit(${namePascalCase}PageState newState) {
-    if (_mounted) emit(newState);
-  }
-}
-''',
+          code: RawCode.pageCubit(
+            nameSnakeCase: nameSnakeCase,
+            namePascalCase: namePascalCase,
+          ),
         ),
         const SizedBox(height: 16),
         _code(
           controller: _pageScrollController,
           fileName: '${state.name.snakeCase}_page.dart',
-          code: '''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'cubit/${nameSnakeCase}_page_cubit.dart';
-import 'cubit/${nameSnakeCase}_page_state.dart';
-
-class ${namePascalCase}Page extends StatelessWidget {
-  const ${namePascalCase}Page({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ${namePascalCase}PageCubit(),
-      child: const ${namePascalCase}View(),
-    );
-  }
-}
-
-class ${namePascalCase}View extends StatefulWidget {
-  const ${namePascalCase}View({super.key});
-
-  @override
-  State<${namePascalCase}View> createState() => _${namePascalCase}ViewState();
-}
-
-class _${namePascalCase}ViewState extends State<${namePascalCase}View> {
-  ${namePascalCase}PageCubit get _cubit {
-    return context.read<${namePascalCase}PageCubit>();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<${namePascalCase}PageCubit, ${namePascalCase}PageState>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('$nameTitleCase'),
-            centerTitle: true,
+          code: RawCode.page(
+            nameSnakeCase: nameSnakeCase,
+            namePascalCase: namePascalCase,
+            nameTitleCase: nameTitleCase,
           ),
-          body: const Center(
-            child: Text('$nameTitleCase'),
-          ),
-        );
-      },
-      listener: _listener,
-    );
-  }
-
-  void _listener(BuildContext context, ${namePascalCase}PageState state) {
-    switch (state.status) {
-      case ${namePascalCase}PageStatus.initial:
-      case ${namePascalCase}PageStatus.loading:
-      case ${namePascalCase}PageStatus.ready:
-        break;
-
-      case ${namePascalCase}PageStatus.failure:
-        break;
-    }
-  }
-}
-''',
         ),
       ],
     );
@@ -274,21 +135,34 @@ class _${namePascalCase}ViewState extends State<${namePascalCase}View> {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: TextField(
-          controller: _nameTextEditingController,
-          style: const TextStyle(
-            fontFamily: 'Consolas',
-          ),
-          maxLines: 1,
-          decoration: InputDecoration(
-            labelText: 'Name',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                width: 1,
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _cubit.nameTextEditingController,
+                style: const TextStyle(
+                  fontFamily: 'Consolas',
+                ),
+                maxLines: 1,
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      width: 1,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
+            const SizedBox(width: 16),
+            IconButton.filledTonal(
+              onPressed: _cubit.onTapDownload,
+              icon: const Icon(
+                Icons.download,
+              ),
+            ),
+          ],
         ),
       ),
     );
