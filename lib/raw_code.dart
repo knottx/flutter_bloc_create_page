@@ -8,22 +8,22 @@ class RawCode {
     return '''
 import 'package:equatable/equatable.dart';
 
-enum ${namePascalCase}PageStatus {
+enum ${namePascalCase}Status {
   initial,
   loading,
   ready,
   failure,
   ;
 
-  bool get isLoading => this == ${namePascalCase}PageStatus.loading;
+  bool get isLoading => this == ${namePascalCase}Status.loading;
 }
 
-class ${namePascalCase}PageState extends Equatable {
-  final ${namePascalCase}PageStatus status;
+class ${namePascalCase}State extends Equatable {
+  final ${namePascalCase}Status status;
   final Object? error;
 
-  const ${namePascalCase}PageState({
-    this.status = ${namePascalCase}PageStatus.initial,
+  const ${namePascalCase}State({
+    this.status = ${namePascalCase}Status.initial,
     this.error,
   });
 
@@ -33,33 +33,33 @@ class ${namePascalCase}PageState extends Equatable {
         error,
       ];
 
-  ${namePascalCase}PageState copyWith({
-    ${namePascalCase}PageStatus? status,
+  ${namePascalCase}State copyWith({
+    ${namePascalCase}Status? status,
     Object? error,
   }) {
-    return ${namePascalCase}PageState(
+    return ${namePascalCase}State(
       status: status ?? this.status,
       error: error ?? this.error,
     );
   }
 
-  ${namePascalCase}PageState loading() {
+  ${namePascalCase}State loading() {
     return copyWith(
-      status: ${namePascalCase}PageStatus.loading,
+      status: ${namePascalCase}Status.loading,
     );
   }
 
-  ${namePascalCase}PageState ready() {
+  ${namePascalCase}State ready() {
     return copyWith(
-      status: ${namePascalCase}PageStatus.ready,
+      status: ${namePascalCase}Status.ready,
     );
   }
 
-  ${namePascalCase}PageState failure(
+  ${namePascalCase}State failure(
     Object error,
   ) {
     return copyWith(
-      status: ${namePascalCase}PageStatus.failure,
+      status: ${namePascalCase}Status.failure,
       error: error,
     );
   }
@@ -76,10 +76,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '${nameSnakeCase}_page_state.dart';
 
-class ${namePascalCase}PageCubit extends Cubit<${namePascalCase}PageState> {
+class ${namePascalCase}Cubit extends Cubit<${namePascalCase}State> {
   bool _mounted = true;
 
-  ${namePascalCase}PageCubit() : super(const ${namePascalCase}PageState());
+  ${namePascalCase}Cubit() : super(const ${namePascalCase}State());
 
   @override
   Future<void> close() {
@@ -87,7 +87,7 @@ class ${namePascalCase}PageCubit extends Cubit<${namePascalCase}PageState> {
     return super.close();
   }
 
-  void _emit(${namePascalCase}PageState newState) {
+  void _emit(${namePascalCase}State newState) {
     if (_mounted) emit(newState);
   }
 }
@@ -106,13 +106,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cubit/${nameSnakeCase}_page_cubit.dart';
 import 'cubit/${nameSnakeCase}_page_state.dart';
 
-class ${namePascalCase}Page extends StatelessWidget {
-  const ${namePascalCase}Page({super.key});
+class ${namePascalCase} extends StatelessWidget {
+  const ${namePascalCase}({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ${namePascalCase}PageCubit(),
+      create: (context) => ${namePascalCase}Cubit(),
       child: const ${namePascalCase}View(),
     );
   }
@@ -126,13 +126,13 @@ class ${namePascalCase}View extends StatefulWidget {
 }
 
 class _${namePascalCase}ViewState extends State<${namePascalCase}View> {
-  ${namePascalCase}PageCubit get _cubit {
-    return context.read<${namePascalCase}PageCubit>();
+  ${namePascalCase}Cubit get _cubit {
+    return context.read<${namePascalCase}Cubit>();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<${namePascalCase}PageCubit, ${namePascalCase}PageState>(
+    return BlocConsumer<${namePascalCase}Cubit, ${namePascalCase}State>(
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -148,14 +148,14 @@ class _${namePascalCase}ViewState extends State<${namePascalCase}View> {
     );
   }
 
-  void _listener(BuildContext context, ${namePascalCase}PageState state) {
+  void _listener(BuildContext context, ${namePascalCase}State state) {
     switch (state.status) {
-      case ${namePascalCase}PageStatus.initial:
-      case ${namePascalCase}PageStatus.loading:
-      case ${namePascalCase}PageStatus.ready:
+      case ${namePascalCase}Status.initial:
+      case ${namePascalCase}Status.loading:
+      case ${namePascalCase}Status.ready:
         break;
 
-      case ${namePascalCase}PageStatus.failure:
+      case ${namePascalCase}Status.failure:
         break;
     }
   }

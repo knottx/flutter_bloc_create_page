@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc_create_page/home_page.dart';
+import 'package:flutter_bloc_create_page/home_screen.dart';
 import 'package:syntax_highlight/syntax_highlight.dart';
 
 void main() async {
@@ -9,10 +9,10 @@ void main() async {
 
   runApp(
     MaterialApp(
-      title: 'Flutter Bloc Create Page',
+      title: 'Flutter Bloc Cubit Create',
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
-      home: HomePage(
+      home: HomeScreen(
         highlighter: Highlighter(
           language: 'dart',
           theme: highlighterDarkTheme,

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_create_page/cubit/home_page_cubit.dart';
-import 'package:flutter_bloc_create_page/cubit/home_page_state.dart';
+import 'package:flutter_bloc_create_page/cubit/home_screen_cubit.dart';
+import 'package:flutter_bloc_create_page/cubit/home_screen_state.dart';
 import 'package:flutter_bloc_create_page/raw_code.dart';
 import 'package:recase/recase.dart';
 import 'package:syntax_highlight/syntax_highlight.dart';
 
-class HomePage extends StatelessWidget {
+class HomeScreen extends StatelessWidget {
   final Highlighter highlighter;
 
-  const HomePage({
+  const HomeScreen({
     super.key,
     required this.highlighter,
   });
@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomePageCubit(),
+      create: (context) => HomeScreenCubit(),
       child: HomeView(
         highlighter: highlighter,
       ),
@@ -39,8 +39,8 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  HomePageCubit get _cubit {
-    return context.read<HomePageCubit>();
+  HomeScreenCubit get _cubit {
+    return context.read<HomeScreenCubit>();
   }
 
   final ScrollController _scrollController = ScrollController();
@@ -59,7 +59,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomePageCubit, HomePageState>(
+    return BlocBuilder<HomeScreenCubit, HomeScreenState>(
       builder: (context, state) {
         return GestureDetector(
           onTap: () {
@@ -90,7 +90,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _body(
-    HomePageState state,
+    HomeScreenState state,
   ) {
     final nameTitleCase = state.name.titleCase;
     final namePascalCase = state.name.pascalCase;
@@ -102,7 +102,7 @@ class _HomeViewState extends State<HomeView> {
         const SizedBox(height: 16),
         _code(
           controller: _stateScrollController,
-          fileName: '${nameSnakeCase}_page_state.dart',
+          fileName: '${nameSnakeCase}_state.dart',
           code: RawCode.pageState(
             nameSnakeCase: nameSnakeCase,
             namePascalCase: namePascalCase,
@@ -111,7 +111,7 @@ class _HomeViewState extends State<HomeView> {
         const SizedBox(height: 16),
         _code(
           controller: _cubitScrollController,
-          fileName: '${nameSnakeCase}_page_cubit.dart',
+          fileName: '${nameSnakeCase}_cubit.dart',
           code: RawCode.pageCubit(
             nameSnakeCase: nameSnakeCase,
             namePascalCase: namePascalCase,
@@ -120,7 +120,7 @@ class _HomeViewState extends State<HomeView> {
         const SizedBox(height: 16),
         _code(
           controller: _pageScrollController,
-          fileName: '${state.name.snakeCase}_page.dart',
+          fileName: '${state.name.snakeCase}.dart',
           code: RawCode.page(
             nameSnakeCase: nameSnakeCase,
             namePascalCase: namePascalCase,

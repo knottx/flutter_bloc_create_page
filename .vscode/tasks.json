@@ -13,7 +13,7 @@
     },
     {
       "label": "Flutter: flutter build web",
-      "group": "build",
+      "group": "none",
       "type": "flutter",
       "command": "flutter",
       "args": ["build", "web", "-t", "lib/main.dart",]

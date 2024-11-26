@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 
-class HomePageState extends Equatable {
+class HomeScreenState extends Equatable {
   final String name;
 
-  const HomePageState({
+  const HomeScreenState({
     this.name = '',
   });
 
@@ -12,10 +12,10 @@ class HomePageState extends Equatable {
         name,
       ];
 
-  HomePageState copyWith({
+  HomeScreenState copyWith({
     String? name,
   }) {
-    return HomePageState(
+    return HomeScreenState(
       name: name ?? this.name,
     );
   }

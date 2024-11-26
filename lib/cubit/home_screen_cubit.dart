@@ -5,15 +5,15 @@ import 'package:archive/archive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_create_page/cubit/home_page_state.dart';
+import 'package:flutter_bloc_create_page/cubit/home_screen_state.dart';
 import 'package:flutter_bloc_create_page/raw_code.dart';
 import 'package:recase/recase.dart';
 
-class HomePageCubit extends Cubit<HomePageState> {
+class HomeScreenCubit extends Cubit<HomeScreenState> {
   final TextEditingController nameTextEditingController =
       TextEditingController();
 
-  HomePageCubit() : super(const HomePageState()) {
+  HomeScreenCubit() : super(const HomeScreenState()) {
     nameTextEditingController.addListener(() {
       final name = nameTextEditingController.text;
       emit(state.copyWith(name: name));
