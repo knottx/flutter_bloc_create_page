@@ -77,18 +77,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '${nameSnakeCase}_page_state.dart';
 
 class ${namePascalCase}Cubit extends Cubit<${namePascalCase}State> {
-  bool _mounted = true;
-
   ${namePascalCase}Cubit() : super(const ${namePascalCase}State());
 
-  @override
-  Future<void> close() {
-    _mounted = false;
-    return super.close();
-  }
-
   void _emit(${namePascalCase}State newState) {
-    if (_mounted) emit(newState);
+    if (!isClosed) emit(newState);
   }
 }
 ''';
@@ -106,8 +98,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cubit/${nameSnakeCase}_page_cubit.dart';
 import 'cubit/${nameSnakeCase}_page_state.dart';
 
-class ${namePascalCase} extends StatelessWidget {
-  const ${namePascalCase}({super.key});
+class $namePascalCase extends StatelessWidget {
+  const $namePascalCase({super.key});
 
   @override
   Widget build(BuildContext context) {

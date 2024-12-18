@@ -82,7 +82,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       ),
     );
 
-    final zippedData = ZipEncoder().encode(archive)!;
+    final zippedData = ZipEncoder().encode(archive);
     final blob = html.Blob([Uint8List.fromList(zippedData)], 'application/zip');
     final url = html.Url.createObjectUrlFromBlob(blob);
 

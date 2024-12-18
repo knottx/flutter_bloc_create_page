@@ -4,7 +4,7 @@ publish_to: none
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.4.4 <4.0.0'
+  sdk: '>=3.6.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -14,7 +14,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   recase: ^4.1.0
   syntax_highlight: ^0.4.0
-  archive: ^3.6.1
+  archive: ^4.0.1
 
 dev_dependencies:
   flutter_test:
