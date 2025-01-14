@@ -25,26 +25,5 @@
       "command": "cp",
       "args": ["-a", "build/web/.", "docs",]
     },
-
-    {
-      "label": "Flutter: flutter pub run build_runner clean",
-      "group": "build",
-      "type": "flutter",
-      "command": "flutter",
-      "args": ["pub", "run", "build_runner", "clean"]
-    },
-    {
-      "label": "Flutter: flutter pub run build_runner build",
-      "group": "build",
-      "type": "flutter",
-      "command": "flutter",
-      "args": [
-        "pub",
-        "run",
-        "build_runner",
-        "build",
-        "--delete-conflicting-outputs"
-      ]
-    },
   ]
 }

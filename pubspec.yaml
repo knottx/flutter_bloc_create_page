@@ -4,17 +4,17 @@ publish_to: none
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.6.0 <4.0.0'
+  sdk: ^3.6.1
 
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.6
   equatable: ^2.0.7
-  flutter_bloc: ^8.1.6
+  flutter_bloc: ^9.0.0
   recase: ^4.1.0
   syntax_highlight: ^0.4.0
-  archive: ^4.0.1
+  archive: ^4.0.2
 
 dev_dependencies:
   flutter_test:

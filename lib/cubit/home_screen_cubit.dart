@@ -19,7 +19,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       emit(state.copyWith(name: name));
     });
 
-    nameTextEditingController.text = 'Home';
+    nameTextEditingController.text = 'HomeScreen';
   }
 
   @override
@@ -61,14 +61,14 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
     archive.addFile(
       ArchiveFile(
-        'cubit/${nameSnakeCase}_page_state.dart',
+        'cubit/${nameSnakeCase}_state.dart',
         pageStateFileBytes.length,
         pageStateFileBytes,
       ),
     );
     archive.addFile(
       ArchiveFile(
-        'cubit/${nameSnakeCase}_page_cubit.dart',
+        'cubit/${nameSnakeCase}_cubit.dart',
         pageCubitFileBytes.length,
         pageCubitFileBytes,
       ),
@@ -76,7 +76,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
     archive.addFile(
       ArchiveFile(
-        '${state.name.snakeCase}_page.dart',
+        '${state.name.snakeCase}.dart',
         pageFileBytes.length,
         pageFileBytes,
       ),
