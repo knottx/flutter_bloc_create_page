@@ -74,7 +74,7 @@ class ${namePascalCase}State extends Equatable {
     return '''
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '${nameSnakeCase}_page_state.dart';
+import '${nameSnakeCase}_state.dart';
 
 class ${namePascalCase}Cubit extends Cubit<${namePascalCase}State> {
   ${namePascalCase}Cubit() : super(const ${namePascalCase}State());
@@ -95,8 +95,8 @@ class ${namePascalCase}Cubit extends Cubit<${namePascalCase}State> {
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'cubit/${nameSnakeCase}_page_cubit.dart';
-import 'cubit/${nameSnakeCase}_page_state.dart';
+import 'cubit/${nameSnakeCase}_cubit.dart';
+import 'cubit/${nameSnakeCase}_state.dart';
 
 class $namePascalCase extends StatelessWidget {
   const $namePascalCase({super.key});
