@@ -1,29 +1,28 @@
+import 'package:recase/recase.dart';
+
 class RawCode {
   RawCode._();
 
-  static String pageState({
-    required String nameSnakeCase,
-    required String namePascalCase,
-  }) {
+  static String state(String name) {
     return '''
 import 'package:equatable/equatable.dart';
 
-enum ${namePascalCase}Status {
+enum ${name.pascalCase}Status {
   initial,
   loading,
   ready,
   failure,
   ;
 
-  bool get isLoading => this == ${namePascalCase}Status.loading;
+  bool get isLoading => this == ${name.pascalCase}Status.loading;
 }
 
-class ${namePascalCase}State extends Equatable {
-  final ${namePascalCase}Status status;
+class ${name.pascalCase}State extends Equatable {
+  final ${name.pascalCase}Status status;
   final Object? error;
 
-  const ${namePascalCase}State({
-    this.status = ${namePascalCase}Status.initial,
+  const ${name.pascalCase}State({
+    this.status = ${name.pascalCase}Status.initial,
     this.error,
   });
 
@@ -33,33 +32,33 @@ class ${namePascalCase}State extends Equatable {
         error,
       ];
 
-  ${namePascalCase}State copyWith({
-    ${namePascalCase}Status? status,
+  ${name.pascalCase}State copyWith({
+    ${name.pascalCase}Status? status,
     Object? error,
   }) {
-    return ${namePascalCase}State(
+    return ${name.pascalCase}State(
       status: status ?? this.status,
       error: error ?? this.error,
     );
   }
 
-  ${namePascalCase}State loading() {
+  ${name.pascalCase}State loading() {
     return copyWith(
-      status: ${namePascalCase}Status.loading,
+      status: ${name.pascalCase}Status.loading,
     );
   }
 
-  ${namePascalCase}State ready() {
+  ${name.pascalCase}State ready() {
     return copyWith(
-      status: ${namePascalCase}Status.ready,
+      status: ${name.pascalCase}Status.ready,
     );
   }
 
-  ${namePascalCase}State failure(
+  ${name.pascalCase}State failure(
     Object error,
   ) {
     return copyWith(
-      status: ${namePascalCase}Status.failure,
+      status: ${name.pascalCase}Status.failure,
       error: error,
     );
   }
@@ -67,87 +66,74 @@ class ${namePascalCase}State extends Equatable {
 ''';
   }
 
-  static String pageCubit({
-    required String nameSnakeCase,
-    required String namePascalCase,
-  }) {
+  static String cubit(String name) {
     return '''
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '${nameSnakeCase}_state.dart';
+import '${name.snakeCase}_state.dart';
 
-class ${namePascalCase}Cubit extends Cubit<${namePascalCase}State> {
-  ${namePascalCase}Cubit() : super(const ${namePascalCase}State());
-
-  void _emit(${namePascalCase}State newState) {
-    if (!isClosed) emit(newState);
-  }
+class ${name.pascalCase}Cubit extends Cubit<${name.pascalCase}State> {
+  ${name.pascalCase}Cubit() : super(const ${name.pascalCase}State());
 }
 ''';
   }
 
-  static String page({
-    required String nameSnakeCase,
-    required String namePascalCase,
-    required String nameTitleCase,
-  }) {
+  static String screen(String name) {
     return '''
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'cubit/${nameSnakeCase}_cubit.dart';
-import 'cubit/${nameSnakeCase}_state.dart';
+import 'cubit/${name.snakeCase}_cubit.dart';
+import 'cubit/${name.snakeCase}_state.dart';
 
-class $namePascalCase extends StatelessWidget {
-  const $namePascalCase({super.key});
+class ${name.pascalCase} extends StatelessWidget {
+  const ${name.pascalCase}({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ${namePascalCase}Cubit(),
-      child: const ${namePascalCase}View(),
+      create: (context) => ${name.pascalCase}Cubit(),
+      child: const ${name.pascalCase}View(),
     );
   }
 }
 
-class ${namePascalCase}View extends StatefulWidget {
-  const ${namePascalCase}View({super.key});
+class ${name.pascalCase}View extends StatefulWidget {
+  const ${name.pascalCase}View({super.key});
 
   @override
-  State<${namePascalCase}View> createState() => _${namePascalCase}ViewState();
+  State<${name.pascalCase}View> createState() => _${name.pascalCase}ViewState();
 }
 
-class _${namePascalCase}ViewState extends State<${namePascalCase}View> {
-  ${namePascalCase}Cubit get _cubit {
-    return context.read<${namePascalCase}Cubit>();
+class _${name.pascalCase}ViewState extends State<${name.pascalCase}View> {
+  ${name.pascalCase}Cubit get _cubit {
+    return context.read<${name.pascalCase}Cubit>();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<${namePascalCase}Cubit, ${namePascalCase}State>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('$nameTitleCase'),
-            centerTitle: true,
-          ),
-          body: const Center(
-            child: Text('$nameTitleCase'),
-          ),
-        );
-      },
+    return BlocListener<${name.pascalCase}Cubit, ${name.pascalCase}State>(
       listener: _listener,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('${name.titleCase}'),
+          centerTitle: true,
+        ),
+        body: const Center(
+          child: Text('${name.titleCase}'),
+        ),
+      ),
     );
   }
 
-  void _listener(BuildContext context, ${namePascalCase}State state) {
+  void _listener(BuildContext context, ${name.pascalCase}State state) {
     switch (state.status) {
-      case ${namePascalCase}Status.initial:
-      case ${namePascalCase}Status.loading:
-      case ${namePascalCase}Status.ready:
+      case ${name.pascalCase}Status.initial:
+      case ${name.pascalCase}Status.loading:
+      case ${name.pascalCase}Status.ready:
         break;
 
-      case ${namePascalCase}Status.failure:
+      case ${name.pascalCase}Status.failure:
         break;
     }
   }

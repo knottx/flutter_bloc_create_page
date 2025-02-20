@@ -3,25 +3,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_create_page/cubit/home_screen_cubit.dart';
 import 'package:flutter_bloc_create_page/cubit/home_screen_state.dart';
-import 'package:flutter_bloc_create_page/raw_code.dart';
 import 'package:recase/recase.dart';
 import 'package:syntax_highlight/syntax_highlight.dart';
 
 class HomeScreen extends StatelessWidget {
   final Highlighter highlighter;
 
-  const HomeScreen({
-    super.key,
-    required this.highlighter,
-  });
+  const HomeScreen({super.key, required this.highlighter});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => HomeScreenCubit(),
-      child: HomeView(
-        highlighter: highlighter,
-      ),
+      child: HomeView(highlighter: highlighter),
     );
   }
 }
@@ -29,10 +23,7 @@ class HomeScreen extends StatelessWidget {
 class HomeView extends StatefulWidget {
   final Highlighter highlighter;
 
-  const HomeView({
-    super.key,
-    required this.highlighter,
-  });
+  const HomeView({super.key, required this.highlighter});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -44,90 +35,72 @@ class _HomeViewState extends State<HomeView> {
   }
 
   final ScrollController _scrollController = ScrollController();
-  final ScrollController _stateScrollController = ScrollController();
-  final ScrollController _cubitScrollController = ScrollController();
-  final ScrollController _pageScrollController = ScrollController();
+  final ScrollController _stateCodeScrollController = ScrollController();
+  final ScrollController _cubitCodeScrollController = ScrollController();
+  final ScrollController _screenCodeScrollController = ScrollController();
 
   @override
   void dispose() {
     _scrollController.dispose();
-    _stateScrollController.dispose();
-    _cubitScrollController.dispose();
-    _pageScrollController.dispose();
+    _stateCodeScrollController.dispose();
+    _cubitCodeScrollController.dispose();
+    _screenCodeScrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeScreenCubit, HomeScreenState>(
-      builder: (context, state) {
-        return GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Scaffold(
-            body: Scrollbar(
-              controller: _scrollController,
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                padding: const EdgeInsets.all(16),
-                child: SafeArea(
-                  child: Center(
-                    child: Container(
-                      constraints: const BoxConstraints(
-                        maxWidth: 600,
-                      ),
-                      child: _body(state),
-                    ),
-                  ),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        body: Scrollbar(
+          controller: _scrollController,
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            padding: const EdgeInsets.all(16),
+            child: SafeArea(
+              child: Center(
+                child: Container(
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  child: _body(),
                 ),
               ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
-  Widget _body(
-    HomeScreenState state,
-  ) {
-    final nameTitleCase = state.name.titleCase;
-    final namePascalCase = state.name.pascalCase;
-    final nameSnakeCase = state.name.snakeCase;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _nameField(),
-        const SizedBox(height: 16),
-        _code(
-          controller: _stateScrollController,
-          fileName: '${nameSnakeCase}_state.dart',
-          code: RawCode.pageState(
-            nameSnakeCase: nameSnakeCase,
-            namePascalCase: namePascalCase,
-          ),
-        ),
-        const SizedBox(height: 16),
-        _code(
-          controller: _cubitScrollController,
-          fileName: '${nameSnakeCase}_cubit.dart',
-          code: RawCode.pageCubit(
-            nameSnakeCase: nameSnakeCase,
-            namePascalCase: namePascalCase,
-          ),
-        ),
-        const SizedBox(height: 16),
-        _code(
-          controller: _pageScrollController,
-          fileName: '${state.name.snakeCase}.dart',
-          code: RawCode.page(
-            nameSnakeCase: nameSnakeCase,
-            namePascalCase: namePascalCase,
-            nameTitleCase: nameTitleCase,
-          ),
-        ),
-      ],
+  Widget _body() {
+    return BlocBuilder<HomeScreenCubit, HomeScreenState>(
+      builder: (context, state) {
+        final name = state.name;
+        return Column(
+          spacing: 16,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _nameField(),
+            _code(
+              controller: _stateCodeScrollController,
+              fileName: '${name.snakeCase}_state.dart',
+              code: state.stateCode,
+            ),
+            _code(
+              controller: _cubitCodeScrollController,
+              fileName: '${name.snakeCase}_cubit.dart',
+              code: state.cubitCode,
+            ),
+            _code(
+              controller: _screenCodeScrollController,
+              fileName: '${name.snakeCase}.dart',
+              code: state.screenCode,
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -140,17 +113,13 @@ class _HomeViewState extends State<HomeView> {
             Expanded(
               child: TextField(
                 controller: _cubit.nameTextEditingController,
-                style: const TextStyle(
-                  fontFamily: 'Consolas',
-                ),
+                style: const TextStyle(fontFamily: 'Consolas'),
                 maxLines: 1,
                 decoration: InputDecoration(
                   labelText: 'Name',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      width: 1,
-                    ),
+                    borderSide: const BorderSide(width: 1),
                   ),
                 ),
               ),
@@ -158,9 +127,7 @@ class _HomeViewState extends State<HomeView> {
             const SizedBox(width: 16),
             IconButton.filledTonal(
               onPressed: _cubit.onTapDownload,
-              icon: const Icon(
-                Icons.download,
-              ),
+              icon: const Icon(Icons.download),
             ),
           ],
         ),
@@ -182,9 +149,7 @@ class _HomeViewState extends State<HomeView> {
             children: [
               Text(
                 fileName,
-                style: const TextStyle(
-                  fontFamily: 'Consolas',
-                ),
+                style: const TextStyle(fontFamily: 'Consolas'),
                 textAlign: TextAlign.left,
               ),
               const SizedBox(height: 8),
@@ -206,9 +171,7 @@ class _HomeViewState extends State<HomeView> {
                             controller: controller,
                             child: Text.rich(
                               widget.highlighter.highlight(code),
-                              style: const TextStyle(
-                                fontFamily: 'Consolas',
-                              ),
+                              style: const TextStyle(fontFamily: 'Consolas'),
                             ),
                           ),
                         ),
@@ -220,10 +183,7 @@ class _HomeViewState extends State<HomeView> {
                           onPressed: () {
                             _onTapCopy(code);
                           },
-                          icon: const Icon(
-                            Icons.copy,
-                            size: 16,
-                          ),
+                          icon: const Icon(Icons.copy, size: 16),
                         ),
                       ),
                     ],
@@ -237,22 +197,15 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  void _onTapCopy(
-    String data,
-  ) {
-    Clipboard.setData(
-      ClipboardData(text: data),
-    );
+  void _onTapCopy(String data) {
+    Clipboard.setData(ClipboardData(text: data));
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.check_circle,
-              color: Colors.green,
-            ),
+            Icon(Icons.check_circle, color: Colors.green),
             SizedBox(width: 8),
             Text('Copied!'),
           ],

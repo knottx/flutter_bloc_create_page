@@ -16,7 +16,14 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   HomeScreenCubit() : super(const HomeScreenState()) {
     nameTextEditingController.addListener(() {
       final name = nameTextEditingController.text;
-      emit(state.copyWith(name: name));
+      emit(
+        state.copyWith(
+          name: name,
+          stateCode: RawCode.state(name),
+          cubitCode: RawCode.cubit(name),
+          screenCode: RawCode.screen(name),
+        ),
+      );
     });
 
     nameTextEditingController.text = 'HomeScreen';
@@ -28,57 +35,35 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     return super.close();
   }
 
-  void setName(String name) {}
-
   void onTapDownload() {
-    final nameTitleCase = state.name.titleCase;
-    final namePascalCase = state.name.pascalCase;
-    final nameSnakeCase = state.name.snakeCase;
-
-    final pageStateFileBytes = utf8.encode(
-      RawCode.pageState(
-        nameSnakeCase: nameSnakeCase,
-        namePascalCase: namePascalCase,
-      ),
-    );
-
-    final pageCubitFileBytes = utf8.encode(
-      RawCode.pageCubit(
-        nameSnakeCase: nameSnakeCase,
-        namePascalCase: namePascalCase,
-      ),
-    );
-
-    final pageFileBytes = utf8.encode(
-      RawCode.page(
-        nameSnakeCase: nameSnakeCase,
-        namePascalCase: namePascalCase,
-        nameTitleCase: nameTitleCase,
-      ),
-    );
-
     final archive = Archive();
 
+    final nameSnakeCase = state.name.snakeCase;
+
+    final stateCodeFileBytes = utf8.encode(state.stateCode);
     archive.addFile(
       ArchiveFile(
         'cubit/${nameSnakeCase}_state.dart',
-        pageStateFileBytes.length,
-        pageStateFileBytes,
-      ),
-    );
-    archive.addFile(
-      ArchiveFile(
-        'cubit/${nameSnakeCase}_cubit.dart',
-        pageCubitFileBytes.length,
-        pageCubitFileBytes,
+        stateCodeFileBytes.length,
+        stateCodeFileBytes,
       ),
     );
 
+    final cubitCodeFileBytes = utf8.encode(state.cubitCode);
     archive.addFile(
       ArchiveFile(
-        '${state.name.snakeCase}.dart',
-        pageFileBytes.length,
-        pageFileBytes,
+        'cubit/${nameSnakeCase}_cubit.dart',
+        cubitCodeFileBytes.length,
+        cubitCodeFileBytes,
+      ),
+    );
+
+    final screenCodeFileBytes = utf8.encode(state.screenCode);
+    archive.addFile(
+      ArchiveFile(
+        '$nameSnakeCase.dart',
+        screenCodeFileBytes.length,
+        screenCodeFileBytes,
       ),
     );
 
