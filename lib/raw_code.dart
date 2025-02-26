@@ -106,10 +106,14 @@ class ${name.pascalCase}View extends StatefulWidget {
 }
 
 class _${name.pascalCase}ViewState extends State<${name.pascalCase}View> {
-  ${name.pascalCase}Cubit get _cubit {
-    return context.read<${name.pascalCase}Cubit>();
-  }
+  late final ${name.pascalCase}Cubit _cubit;
 
+  @override
+  void initState() {
+    super.initState();
+    _cubit = context.read<${name.pascalCase}Cubit>();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return BlocListener<${name.pascalCase}Cubit, ${name.pascalCase}State>(
